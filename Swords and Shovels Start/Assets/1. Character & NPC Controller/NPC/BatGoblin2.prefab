@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4591444548809694}
   - component: {fileID: 137795354575275260}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: goblin_low2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,7 +100,9 @@ GameObject:
   - component: {fileID: 95948711514966916}
   - component: {fileID: 4985266814863413716}
   - component: {fileID: -6973515226388206173}
-  m_Layer: 0
+  - component: {fileID: 8649106925679524538}
+  - component: {fileID: 1753417208009698130}
+  m_Layer: 8
   m_Name: BatGoblin2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -176,5 +178,42 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d703ae8e2e873f340bb081f59a623f71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  idleTime: 1
+  traceInterval: 0.3
+  aggroRange: 10
+  waypoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  waypointIndex: -1
+  animator: {fileID: 95948711514966916}
+  agent: {fileID: 4985266814863413716}
+--- !u!114 &8649106925679524538
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1880194204201268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: afecb12eba33fff45895f1d063805b98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHp: 0
+  damage: 0
+  armor: 0
+--- !u!114 &1753417208009698130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1880194204201268}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4549e1f545cc614fbcf7d7b176baa09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
