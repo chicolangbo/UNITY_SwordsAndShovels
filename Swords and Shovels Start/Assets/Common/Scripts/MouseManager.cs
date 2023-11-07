@@ -8,8 +8,12 @@ public class MouseManager : MonoBehaviour
     public Texture2D pointer; // normal mouse pointer
     public Texture2D target; // target mouse pointer
     public Texture2D doorway; // doorway mouse pointer
+    public Texture2D sword;
+
+    public GameObject attacker;
 
     public UnityEvent<Vector3> OnClickEnvironment;
+    public UnityEvent<GameObject> OnClickAttackable;
 
     void Update()
     {
@@ -18,7 +22,13 @@ public class MouseManager : MonoBehaviour
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 50, clickableLayer.value))
         {
             bool door = false;
-            if (hit.collider.gameObject.tag == "Doorway")
+            IAttackable attackable = hit.collider.GetComponent<IAttackable>();
+
+            if (attackable != null)
+            {
+                Cursor.SetCursor(sword, Vector2.zero, CursorMode.Auto);
+            }
+            else if (hit.collider.gameObject.tag == "Doorway")
             {
                 Cursor.SetCursor(doorway, new Vector2(16, 16), CursorMode.Auto);
                 door = true;
@@ -31,6 +41,7 @@ public class MouseManager : MonoBehaviour
             if(Input.GetMouseButtonDown(0))
             {
                 Vector3 destination = hit.point;
+                
                 if(door)
                 {
                     if(hit.transform.GetChild(0) == null)
@@ -39,7 +50,17 @@ public class MouseManager : MonoBehaviour
                     }
                     destination = hit.transform.GetChild(0).transform.position;
                 }
-                OnClickEnvironment.Invoke(destination);
+
+                else if(attackable != null)
+                {
+                    OnClickAttackable.Invoke(hit.collider.gameObject);
+                }
+
+                else
+                {
+
+                    OnClickEnvironment.Invoke(destination);
+                }
             }
         }
         else
