@@ -22,7 +22,7 @@ public class MouseManager : MonoBehaviour
         if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 50, clickableLayer.value))
         {
             bool door = false;
-            IAttackable attackable = hit.collider.GetComponent<IAttackable>();
+            IAttackable attackable = hit.transform.GetComponent<IAttackable>();
 
             if (attackable != null)
             {
