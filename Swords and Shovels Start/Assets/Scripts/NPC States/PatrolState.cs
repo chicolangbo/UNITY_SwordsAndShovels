@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PatrolState : NPCStateBase
 {
@@ -11,8 +12,11 @@ public class PatrolState : NPCStateBase
     public override void Enter()
     {
         base.Enter();
-        npcCtrl.waypointIndex = (int)Mathf.Repeat(npcCtrl.waypointIndex + 1, npcCtrl.waypoints.Length);
-        npcCtrl.agent.destination = npcCtrl.waypoints[npcCtrl.waypointIndex].position;
+        if (npcCtrl.gameObject.GetComponent<NavMeshAgent>().enabled)
+        {
+            npcCtrl.waypointIndex = (int)Mathf.Repeat(npcCtrl.waypointIndex + 1, npcCtrl.waypoints.Length);
+            npcCtrl.agent.destination = npcCtrl.waypoints[npcCtrl.waypointIndex].position;
+        }
     }
 
     public override void Exit()
@@ -30,7 +34,7 @@ public class PatrolState : NPCStateBase
             return;
         }
 
-        if (npcCtrl.agent.remainingDistance < npcCtrl.agent.stoppingDistance)
+        if (npcCtrl.gameObject.GetComponent<AttackedForce>().isGrounded && npcCtrl.agent.remainingDistance < npcCtrl.agent.stoppingDistance)
         {
             npcCtrl.SetState(NPCController2.States.Idle);
             return;

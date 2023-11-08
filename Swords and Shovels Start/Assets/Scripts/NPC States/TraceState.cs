@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class TraceState : NPCStateBase
 {
@@ -11,10 +12,11 @@ public class TraceState : NPCStateBase
     public override void Enter()
     {
         base.Enter();
-        npcCtrl.agent.isStopped = false;
-        npcCtrl.agent.speed = agentSpeed; // 뛰어가도록 세팅
-        npcCtrl.agent.destination = player.transform.position;
-
+        if (npcCtrl.gameObject.GetComponent<NavMeshAgent>().enabled)
+        {
+            npcCtrl.agent.speed = agentSpeed; // 뛰어가도록 세팅
+            npcCtrl.agent.destination = player.transform.position;
+        }
     }
 
     public override void Exit()
@@ -29,6 +31,13 @@ public class TraceState : NPCStateBase
         if (distanceToPlayer > npcCtrl.aggroRange)
         {
             npcCtrl.SetState(NPCController2.States.Idle);
+            return;
+        }
+
+        // 공격 range 검사 후 상태 전환
+        if(distanceToPlayer < npcCtrl.attackRange)
+        {
+            npcCtrl.SetState(NPCController2.States.Attack);
             return;
         }
 

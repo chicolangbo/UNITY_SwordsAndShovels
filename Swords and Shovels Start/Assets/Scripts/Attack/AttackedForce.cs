@@ -9,7 +9,7 @@ public class AttackedForce : MonoBehaviour, IAttackable
     public float liftY = 0.01f;
     private Rigidbody rigidBody;
     private NavMeshAgent navMeshAgent;
-    private bool isGrounded;
+    public bool isGrounded = true;
     private Coroutine switchToNavMeshAgent;
 
     private void Awake()
@@ -26,6 +26,7 @@ public class AttackedForce : MonoBehaviour, IAttackable
         dir.Normalize();
         dir.y += liftY;
         rigidBody.AddForce(dir * force, ForceMode.Impulse);
+        Debug.Log(force);
 
         if (switchToNavMeshAgent != null) // 코루틴 중첩 예외처리
         {
@@ -52,16 +53,24 @@ public class AttackedForce : MonoBehaviour, IAttackable
         }
     }
 
+    private void Update()
+    {
+        Debug.Log((rigidBody.velocity.x, rigidBody.velocity.y));
+    }
+
     public IEnumerator SwitchToNavMeshAgent()
     {
-        // Rigidbody가 공중에 떠 있을 때까지 대기
-        yield return new WaitUntil(() => rigidBody.velocity.y > 0);
+        yield return new WaitForSeconds(0.5f);
+
+        //// Rigidbody가 공중에 떠 있을 때까지 대기
+        //yield return new WaitUntil(() => rigidBody.velocity.y >= 0);
+        //Debug.Log("공중에 떠 있을 때까지 대기중");
 
         // Rigidbody가 바닥에 닿을 때까지 대기
         while(!isGrounded)
         {
             yield return new WaitForSeconds(0.1f);
-            Debug.Log("바닥에 닿을 때까지 대기중");
+            Debug.Log($"{gameObject.name} 바닥에 닿을 때까지 대기중");
         }
 
         rigidBody.isKinematic = true;

@@ -19,6 +19,7 @@ public abstract class NPCStateBase : StateBase
     protected float agentSpeed, speed;
     protected Transform player;
     protected float distanceToPlayer;
+    protected float remainToPlayer;
     protected float timer;
 
     public NPCStateBase(NPCController2 npcCtrl)
@@ -26,21 +27,33 @@ public abstract class NPCStateBase : StateBase
         this.npcCtrl = npcCtrl;
         //animator = npcCtrl.GetComponent<Animator>();
         //agent = npcCtrl.GetComponent<NavMeshAgent>();
-        player = player = GameObject.FindWithTag("Player").transform;
+        player = GameObject.FindWithTag("Player").transform;
         agentSpeed = npcCtrl.agent.speed;
         speed = agentSpeed / 2f;
     }
 
     public override void Enter()
     {
-        timer = 0f;
-        npcCtrl.agent.speed = speed;
-        npcCtrl.agent.isStopped = false;
+        if (npcCtrl.gameObject.GetComponent<NavMeshAgent>().enabled)
+        {
+            timer = 0f;
+            npcCtrl.agent.speed = speed;
+            npcCtrl.agent.isStopped = false;
+        }
     }
 
     public override void Update()
     {
-        distanceToPlayer = Vector3.Distance(player.position, npcCtrl.transform.position);
+        if(player != null)
+        {
+            distanceToPlayer = Vector3.Distance(player.position, npcCtrl.transform.position);
+        }
         npcCtrl.animator.SetFloat("Speed", npcCtrl.agent.velocity.magnitude);
+    }
+
+    public bool IsOnNavMesh(NavMeshAgent agent)
+    {
+        NavMeshHit hit;
+        return NavMesh.SamplePosition(agent.transform.position, out hit, agent.height * 0.5f, NavMesh.AllAreas);
     }
 }

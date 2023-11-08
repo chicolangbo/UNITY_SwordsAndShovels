@@ -11,7 +11,6 @@ public class IdleState : NPCStateBase
     public override void Enter()
     {
         base.Enter();
-        npcCtrl.agent.isStopped = true;
     }
 
     public override void Exit()
@@ -21,6 +20,7 @@ public class IdleState : NPCStateBase
     public override void Update()
     {
         base.Update();
+
         // 상태 전환 우선순위 세팅
         if (distanceToPlayer < npcCtrl.aggroRange)
         {

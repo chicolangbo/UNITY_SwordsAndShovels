@@ -10,7 +10,8 @@ public class NPCController2 : MonoBehaviour
     {
         Idle,
         Patrol,
-        Trace
+        Trace,
+        Attack
     }
 
     private StateManager stateManager = new StateManager();
@@ -34,7 +35,14 @@ public class NPCController2 : MonoBehaviour
 
     public float idleTime = 1f;
     public float traceInterval = 0.3f;
-    public float aggroRange = 10; // distance in scene units below which the NPC will increase speed and seek the player
+    public float aggroRange = 10f; // distance in scene units below which the NPC will increase speed and seek the player
+    public float attackRange = 2f; // distance in scene units below which the NPC will increase speed and seek the player
+
+    public Weapon weapon;
+    public Transform weaponDummy;
+    public Transform tempDummy;
+    protected Transform player;
+
     public Transform[] waypoints; // collection of waypoints which define a patrol area
     public int waypointIndex = -1; // the current waypoint index in the waypoints array
 
@@ -47,6 +55,12 @@ public class NPCController2 : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
+        player = GameObject.FindWithTag("Player").transform;
+
+        if (weapon.prefab != null && weaponDummy != null)
+        {
+            Instantiate(weapon.prefab, weaponDummy);
+        }
     }
 
     private void Start()
@@ -54,6 +68,7 @@ public class NPCController2 : MonoBehaviour
         states.Add(new IdleState(this));
         states.Add(new PatrolState(this));
         states.Add(new TraceState(this));
+        states.Add(new AttackState(this));
 
         SetState(States.Idle);
     }
@@ -68,6 +83,18 @@ public class NPCController2 : MonoBehaviour
         if (collision.gameObject.tag == "DieFloor")
         {
             Destroy(gameObject);
+        }
+    }
+
+    public void Hit()
+    {
+        if (weapon.prefab == null) // 주먹 공격
+        {
+            weapon.ExecuteAttack(gameObject, player.gameObject);
+        }
+        else // 발사체 공격
+        {
+            weapon.ExecuteLongDistanceAttack(gameObject, player.gameObject, tempDummy);
         }
     }
 }
