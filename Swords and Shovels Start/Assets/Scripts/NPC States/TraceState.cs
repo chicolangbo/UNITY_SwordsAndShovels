@@ -36,7 +36,10 @@ public class TraceState : NPCStateBase
         if (timer >= npcCtrl.traceInterval)
         {
             timer = 0f;
-            npcCtrl.agent.destination = player.position;
+             if(npcCtrl.agent.enabled == true)
+            {
+                 npcCtrl.agent.destination = player.position;
+            }
         }
     }
 }

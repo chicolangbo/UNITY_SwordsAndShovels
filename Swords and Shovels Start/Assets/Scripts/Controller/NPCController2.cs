@@ -62,4 +62,12 @@ public class NPCController2 : MonoBehaviour
     {
         stateManager.currentState.Update();
     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "DieFloor")
+        {
+            Destroy(gameObject);
+        }
+    }
 }
