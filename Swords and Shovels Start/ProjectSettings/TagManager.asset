@@ -6,7 +6,6 @@ TagManager:
   tags:
   - HardFloor
   - Doorway
-  - Enemy
   layers:
   - Default
   - TransparentFX
