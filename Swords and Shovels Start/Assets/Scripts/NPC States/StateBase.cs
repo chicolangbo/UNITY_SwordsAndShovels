@@ -14,10 +14,7 @@ public abstract class NPCStateBase : StateBase
 {
     protected NPCController2 npcCtrl;
 
-    //private Animator animator; // reference to the animator component
-    //protected NavMeshAgent agent; // reference to the NavMeshAgent
     protected float agentSpeed, speed;
-    protected Transform player;
     protected float distanceToPlayer;
     protected float remainToPlayer;
     protected float timer;
@@ -27,7 +24,6 @@ public abstract class NPCStateBase : StateBase
         this.npcCtrl = npcCtrl;
         //animator = npcCtrl.GetComponent<Animator>();
         //agent = npcCtrl.GetComponent<NavMeshAgent>();
-        player = GameObject.FindWithTag("Player").transform;
         agentSpeed = npcCtrl.agent.speed;
         speed = agentSpeed / 2f;
     }
@@ -44,9 +40,9 @@ public abstract class NPCStateBase : StateBase
 
     public override void Update()
     {
-        if(player != null)
+        if(npcCtrl.targetTr != null)
         {
-            distanceToPlayer = Vector3.Distance(player.position, npcCtrl.transform.position);
+            distanceToPlayer = Vector3.Distance(npcCtrl.targetTr.position, npcCtrl.transform.position);
         }
         npcCtrl.animator.SetFloat("Speed", npcCtrl.agent.velocity.magnitude);
     }

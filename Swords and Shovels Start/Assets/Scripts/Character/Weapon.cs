@@ -8,7 +8,7 @@ public class Weapon : AttackDefinition
 {
     public GameObject prefab;
 
-    public void ExecuteAttack(GameObject attacker, GameObject defender)
+    public override void ExecuteAttack(GameObject attacker, GameObject defender)
     {
         CheckAttackPossible(attacker, defender);
 
@@ -25,13 +25,13 @@ public class Weapon : AttackDefinition
 
     public void ExecuteLongDistanceAttack(GameObject attacker, GameObject defender, Transform weaponDummy)
     {
-        CheckAttackPossible(attacker, defender);
+        //CheckAttackPossible(attacker, defender);
 
-        var aStats = attacker.GetComponent<CharacterStats>();
-        var dStats = defender.GetComponent<CharacterStats>();
-        var attack = CreateAttack(aStats, dStats);
+        //var aStats = attacker.GetComponent<CharacterStats>();
+        //var dStats = defender.GetComponent<CharacterStats>();
+        //var attack = CreateAttack(aStats, dStats);
 
-        ThrowRock(attacker, defender, weaponDummy, attack);
+        //ThrowRock(attacker, defender, weaponDummy, attack);
     }
 
     public void CheckAttackPossible(GameObject attacker, GameObject defender)
@@ -61,13 +61,13 @@ public class Weapon : AttackDefinition
 
     public void ThrowRock(GameObject attacker, GameObject defender, Transform weaponDummy, Attack attack)
     {
-        var projectile = Instantiate(prefab, weaponDummy.position, Quaternion.identity);
-        projectile.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+        //var projectile = Instantiate(prefab, weaponDummy.position, Quaternion.identity);
+        //projectile.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
 
-        var look = defender.transform.position;
-        look.y = weaponDummy.position.y + 2f;
-        projectile.transform.LookAt(look);
-        projectile.GetComponent<Projectile>().ThrowProjectile();
-        projectile.GetComponent<Projectile>().Set(attacker, defender, attack);
+        //var look = defender.transform.position;
+        //look.y = weaponDummy.position.y + 2f;
+        //projectile.transform.LookAt(look);
+        //projectile.GetComponent<Projectile>().ThrowProjectile();
+        //projectile.GetComponent<Projectile>().Set(attacker, defender, attack);
     }
 }

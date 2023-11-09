@@ -7,10 +7,6 @@ public class DestructedDestroyGameObject : MonoBehaviour, IDestructable
 {
     public void OnDestruction(GameObject attacker)
     {
-        if(gameObject.tag == "Player")
-        {
-            SceneManager.LoadScene(0);
-        }
         Destroy(gameObject);
     }
 }

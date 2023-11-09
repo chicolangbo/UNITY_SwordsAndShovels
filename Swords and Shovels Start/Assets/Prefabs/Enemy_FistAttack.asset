@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a2f01b64ecb25c439d69b8fd4cb0a9e, type: 3}
   m_Name: Enemy_FistAttack
   m_EditorClassIdentifier: 
-  coolDown: 0
+  coolDown: 2
   range: 2
   minDamage: 1
   maxDamage: 2

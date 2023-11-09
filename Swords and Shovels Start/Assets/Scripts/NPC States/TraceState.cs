@@ -15,7 +15,7 @@ public class TraceState : NPCStateBase
         if (npcCtrl.gameObject.GetComponent<NavMeshAgent>().enabled)
         {
             npcCtrl.agent.speed = agentSpeed; // 뛰어가도록 세팅
-            npcCtrl.agent.destination = player.transform.position;
+            npcCtrl.agent.destination = npcCtrl.targetTr.transform.position;
         }
     }
 
@@ -47,7 +47,7 @@ public class TraceState : NPCStateBase
             timer = 0f;
              if(npcCtrl.agent.enabled == true)
             {
-                 npcCtrl.agent.destination = player.position;
+                 npcCtrl.agent.destination = npcCtrl.targetTr.position;
             }
         }
     }

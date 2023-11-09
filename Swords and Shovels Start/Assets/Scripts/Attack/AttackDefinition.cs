@@ -31,4 +31,8 @@ public class AttackDefinition : ScriptableObject
         return new Attack((int)damage, critical);
     }
 
+    public virtual void ExecuteAttack(GameObject attacker, GameObject defender)
+    {
+        //
+    }
 }

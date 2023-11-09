@@ -6,6 +6,8 @@ using UnityEngine.UIElements;
 
 public class NPCController2 : MonoBehaviour
 {
+    public AttackDefinition attackDef;
+
     public enum States
     {
         Idle,
@@ -39,9 +41,9 @@ public class NPCController2 : MonoBehaviour
     public float attackRange = 2f; // distance in scene units below which the NPC will increase speed and seek the player
 
     public Weapon weapon;
-    public Transform weaponDummy;
+    public Transform projectileDummy;
     public Transform tempDummy;
-    protected Transform player;
+    public Transform targetTr;
 
     public Transform[] waypoints; // collection of waypoints which define a patrol area
     public int waypointIndex = -1; // the current waypoint index in the waypoints array
@@ -55,11 +57,11 @@ public class NPCController2 : MonoBehaviour
     {
         animator = GetComponent<Animator>();
         agent = GetComponent<NavMeshAgent>();
-        player = GameObject.FindWithTag("Player").transform;
+        targetTr = GameObject.FindWithTag("Player").transform;
 
-        if (weapon.prefab != null && weaponDummy != null)
+        if (weapon.prefab != null && projectileDummy != null)
         {
-            Instantiate(weapon.prefab, weaponDummy);
+            Instantiate(weapon.prefab, projectileDummy);
         }
     }
 
@@ -88,13 +90,21 @@ public class NPCController2 : MonoBehaviour
 
     public void Hit()
     {
-        if (weapon.prefab == null) // 주먹 공격
+        // 내 코드
+        //if (weapon.prefab == null) // 주먹 공격
+        //{
+        //    weapon.ExecuteAttack(gameObject, player.gameObject);
+        //}
+        //else // 발사체 공격
+        //{
+        //    weapon.ExecuteLongDistanceAttack(gameObject, player.gameObject, tempDummy);
+        //}
+
+        if(targetTr == null)
         {
-            weapon.ExecuteAttack(gameObject, player.gameObject);
+            return;
         }
-        else // 발사체 공격
-        {
-            weapon.ExecuteLongDistanceAttack(gameObject, player.gameObject, tempDummy);
-        }
+
+        attackDef.ExecuteAttack(gameObject, targetTr.gameObject);
     }
 }

@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3cd75c08e9e1ff459119645f1aba69b, type: 3}
+  m_Name: Spell
+  m_EditorClassIdentifier: 
+  coolDown: 1
+  range: 10
+  minDamage: 10
+  maxDamage: 20
+  criticalChance: 0.3
+  criticalMultiplier: 2
+  projectilePrefab: {fileID: 3201855709664197987, guid: 6aff2b1c77b4e8545a181e80733248d5, type: 3}
+  speed: 100
+  distance: 10

@@ -53,11 +53,6 @@ public class AttackedForce : MonoBehaviour, IAttackable
         }
     }
 
-    private void Update()
-    {
-        Debug.Log((rigidBody.velocity.x, rigidBody.velocity.y));
-    }
-
     public IEnumerator SwitchToNavMeshAgent()
     {
         yield return new WaitForSeconds(0.5f);

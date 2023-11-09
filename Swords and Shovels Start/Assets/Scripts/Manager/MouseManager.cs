@@ -54,13 +54,10 @@ public class MouseManager : MonoBehaviour
                 else if(attackable != null)
                 {
                     OnClickAttackable.Invoke(hit.collider.gameObject);
+                    return;
                 }
 
-                else
-                {
-
-                    OnClickEnvironment.Invoke(destination);
-                }
+                OnClickEnvironment.Invoke(destination);
             }
         }
         else
