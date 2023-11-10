@@ -14,6 +14,7 @@ public class MouseManager : MonoBehaviour
 
     public UnityEvent<Vector3> OnClickEnvironment;
     public UnityEvent<GameObject> OnClickAttackable;
+    public UnityEvent<Vector3> OnRightClickEnvironment;
 
     void Update()
     {
@@ -58,6 +59,10 @@ public class MouseManager : MonoBehaviour
                 }
 
                 OnClickEnvironment.Invoke(destination);
+            }
+            else if(Input.GetMouseButtonDown(1)) 
+            {
+                OnRightClickEnvironment.Invoke(hit.point);
             }
         }
         else

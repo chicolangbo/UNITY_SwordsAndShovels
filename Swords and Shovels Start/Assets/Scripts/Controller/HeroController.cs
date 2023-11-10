@@ -7,6 +7,8 @@ using static UnityEngine.GraphicsBuffer;
 
 public class HeroController : MonoBehaviour
 {
+    public AttackDefinition skillAttack;
+
     public float stompRange;
     private List<Collider> stompEnemies = new List<Collider>();
     private Inventory inventory = new Inventory();
@@ -15,7 +17,7 @@ public class HeroController : MonoBehaviour
     private NavMeshAgent agent; // reference to the NavMeshAgent
 
     private GameObject attackTarget;
-    private Coroutine coMoveAndAttack;
+    private Coroutine coMove;
 
     private void Awake()
     {
@@ -27,19 +29,15 @@ public class HeroController : MonoBehaviour
     private void Update()
     {
         animator.SetFloat("Speed", agent.velocity.magnitude); // 이동을 담당하는 agent, magnitude를 하면 크기만 스칼라값으로 넘김
-        if(Input.GetMouseButtonDown(1))
-        {
-            AttackArea();
-        }
     }
 
     public void SetDestination(Vector3 destination)
     {
         // 코루틴 돌고 있으면 정지
-        if (coMoveAndAttack != null) // 코루틴 중첩 예외처리
+        if (coMove != null) // 코루틴 중첩 예외처리
         {
-            StopCoroutine(coMoveAndAttack);
-            coMoveAndAttack = null;
+            StopCoroutine(coMove);
+            coMove = null;
         }
         // 타겟 클리어
         attackTarget = null;
@@ -50,31 +48,43 @@ public class HeroController : MonoBehaviour
     public void AttackTarget(GameObject target)
     {
         // 범위 안에 들어올 때까지 이동
-        if(coMoveAndAttack != null) // 코루틴 중첩 예외처리
+        if(coMove != null) // 코루틴 중첩 예외처리
         {
-            StopCoroutine(coMoveAndAttack);
-            coMoveAndAttack = null;
+            StopCoroutine(coMove);
+            coMove = null;
         }
         
         attackTarget = target;
-        coMoveAndAttack = StartCoroutine(CoMoveAndAttack());
+        coMove = StartCoroutine(CoMoveAndAttack());
     }
 
-    public void AttackArea()
+    public void DoSkill(Vector3 destination)
     {
-        stompEnemies.Clear();
-        animator.SetTrigger("StompAttack");
-        // temp에 넣어놓고
-        var enemies = Physics.OverlapSphere(transform.position, stompRange);
-        // 콜라이더 태그가 enemy면 stompEnemies에 넣기
-        foreach(var enemy in enemies)
+        if (coMove != null) // 코루틴 중첩 예외처리
         {
-            if(enemy.gameObject.tag == "Enemy")
-            {
-                stompEnemies.Add(enemy);
-            }
+            StopCoroutine(coMove);
+            coMove = null;
         }
+
+        attackTarget = null;
+        coMove = StartCoroutine(CoMoveAndSkill(destination));
     }
+
+    //public void AttackArea()
+    //{
+    //    stompEnemies.Clear();
+    //    animator.SetTrigger("StompAttack");
+    //    // temp에 넣어놓고
+    //    var enemies = Physics.OverlapSphere(transform.position, stompRange);
+    //    // 콜라이더 태그가 enemy면 stompEnemies에 넣기
+    //    foreach(var enemy in enemies)
+    //    {
+    //        if(enemy.gameObject.tag == "Enemy")
+    //        {
+    //            stompEnemies.Add(enemy);
+    //        }
+    //    }
+    //}
 
     private IEnumerator CoMoveAndAttack()
     {
@@ -103,6 +113,20 @@ public class HeroController : MonoBehaviour
         }
     }
 
+    private IEnumerator CoMoveAndSkill(Vector3 destination)
+    {
+        // 이동 후 스톰프 어택
+        agent.isStopped = false;
+        agent.destination = destination;
+        var distance = Vector3.Distance(transform.position, destination);
+        while (Vector3.Distance(transform.position, destination) > agent.stoppingDistance)
+        {
+            yield return null;
+        }
+        agent.isStopped = true;
+        animator.SetTrigger("StompAttack");
+    }
+
     public void Hit()
     {
         if (inventory == null || inventory.CurrentWeapon == null)
@@ -118,22 +142,27 @@ public class HeroController : MonoBehaviour
 
     public void HitStomp()
     {
-        // attack 생성
-        foreach(var enemy in stompEnemies)
+        if(skillAttack != null)
         {
-            var aStats = GetComponent<CharacterStats>();
-            var dStats = enemy.GetComponent<CharacterStats>();
-            if(dStats != null)
-            {
-                var attackDefinition = new AttackDefinition();
-                var attack = attackDefinition.CreateAttack(aStats, dStats);
-                // 데미지 닳게 하기
-                var attackables = enemy.GetComponents<IAttackable>();
-                foreach (var attackable in attackables)
-                {
-                    attackable.OnAttack(gameObject, attack);
-                }
-            }
+            skillAttack.ExecuteAttack(gameObject, null);
         }
+
+        //// attack 생성
+        //foreach(var enemy in stompEnemies)
+        //{
+        //    var aStats = GetComponent<CharacterStats>();
+        //    var dStats = enemy.GetComponent<CharacterStats>();
+        //    if(dStats != null)
+        //    {
+        //        var attackDefinition = new AttackDefinition();
+        //        var attack = attackDefinition.CreateAttack(aStats, dStats);
+        //        // 데미지 닳게 하기
+        //        var attackables = enemy.GetComponents<IAttackable>();
+        //        foreach (var attackable in attackables)
+        //        {
+        //            attackable.OnAttack(gameObject, attack);
+        //        }
+        //    }
+        //}
     }
 }

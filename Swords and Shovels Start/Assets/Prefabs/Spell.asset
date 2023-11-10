@@ -19,5 +19,5 @@ MonoBehaviour:
   criticalChance: 0.3
   criticalMultiplier: 2
   projectilePrefab: {fileID: 3201855709664197987, guid: 6aff2b1c77b4e8545a181e80733248d5, type: 3}
-  speed: 100
+  speed: 70
   distance: 10

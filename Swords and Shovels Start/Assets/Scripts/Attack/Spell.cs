@@ -35,8 +35,6 @@ public class Spell : AttackDefinition
 
     public void OnProjectileCollided(GameObject attacker, GameObject defender)
     {
-        Debug.Log(defender.name);
-
         if(attacker == null || defender == null)
         {
             return;

@@ -34,8 +34,8 @@ public class TraceState : NPCStateBase
             return;
         }
 
-        // 공격 range 검사 후 상태 전환
-        if(distanceToPlayer < npcCtrl.attackRange)
+        // 공격 range 검사 && 레이캐스트 시 플레이어에 맞으면 상태 전환
+        if(distanceToPlayer < npcCtrl.attackRange && !npcCtrl.RaycastToTarget)
         {
             npcCtrl.SetState(NPCController2.States.Attack);
             return;

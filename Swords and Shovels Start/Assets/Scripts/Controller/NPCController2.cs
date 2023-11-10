@@ -45,6 +45,47 @@ public class NPCController2 : MonoBehaviour
     public Transform tempDummy;
     public Transform targetTr;
 
+    public bool RaycastToTarget
+    {
+        get
+        {
+            if(targetTr != null)
+            {
+                // 손 위치 말고 근사치로 세팅
+                var origin = transform.position;
+                origin.y += 1f;
+
+                var target = targetTr.position;
+                target.y += 1f;
+
+                var direction = target - origin;
+                direction.Normalize();
+
+                // 전체 레이어 - 내 레이어 - 타겟 레이어
+                var mask = LayerMask.GetMask(LayerMask.LayerToName(gameObject.layer), LayerMask.LayerToName(targetTr.gameObject.layer));
+                var layer = ~0 ^ mask;
+                return Physics.Raycast(origin, direction, attackDef.range, layer);
+            }
+            return false;
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+
+        var origin = transform.position;
+        origin.y += 1f;
+
+        var target = targetTr.position;
+        target.y += 1f;
+
+        var direction = target - origin;
+        direction.Normalize();
+
+        Gizmos.DrawRay(origin, direction * attackDef.range);
+    }
+
     public Transform[] waypoints; // collection of waypoints which define a patrol area
     public int waypointIndex = -1; // the current waypoint index in the waypoints array
 

@@ -32,7 +32,7 @@ public class AttackState : NPCStateBase
         base.Update();
 
         // Trace로 상태 전환
-        if(distanceToPlayer > npcCtrl.attackDef.range)
+        if(distanceToPlayer > npcCtrl.attackDef.range || npcCtrl.RaycastToTarget)
         {
             npcCtrl.SetState(NPCController2.States.Trace);
             return;
