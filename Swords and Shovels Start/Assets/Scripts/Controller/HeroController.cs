@@ -8,6 +8,7 @@ using static UnityEngine.GraphicsBuffer;
 public class HeroController : MonoBehaviour
 {
     public AttackDefinition skillAttack;
+    public AttackDefinition skillAttack2;
 
     public float stompRange;
     private List<Collider> stompEnemies = new List<Collider>();
@@ -146,23 +147,5 @@ public class HeroController : MonoBehaviour
         {
             skillAttack.ExecuteAttack(gameObject, null);
         }
-
-        //// attack 생성
-        //foreach(var enemy in stompEnemies)
-        //{
-        //    var aStats = GetComponent<CharacterStats>();
-        //    var dStats = enemy.GetComponent<CharacterStats>();
-        //    if(dStats != null)
-        //    {
-        //        var attackDefinition = new AttackDefinition();
-        //        var attack = attackDefinition.CreateAttack(aStats, dStats);
-        //        // 데미지 닳게 하기
-        //        var attackables = enemy.GetComponents<IAttackable>();
-        //        foreach (var attackable in attackables)
-        //        {
-        //            attackable.OnAttack(gameObject, attack);
-        //        }
-        //    }
-        //}
     }
 }

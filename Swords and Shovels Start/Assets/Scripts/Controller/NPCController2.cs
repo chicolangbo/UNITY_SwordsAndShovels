@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UIElements;
@@ -13,7 +15,8 @@ public class NPCController2 : MonoBehaviour
         Idle,
         Patrol,
         Trace,
-        Attack
+        Attack,
+        GameOver
     }
 
     private StateManager stateManager = new StateManager();
@@ -100,9 +103,30 @@ public class NPCController2 : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         targetTr = GameObject.FindWithTag("Player").transform;
 
-        if (weapon.prefab != null && projectileDummy != null)
+        //if (weapon.prefab != null && projectileDummy != null)
+        //{
+        //    Instantiate(weapon.prefab, projectileDummy);
+        //}
+
+        if(targetTr != null)
         {
-            Instantiate(weapon.prefab, projectileDummy);
+            var playerDieEvent = targetTr.GetComponent<DestructedEvents>();
+            if(playerDieEvent != null)
+            {
+                playerDieEvent.OnEvent += OnPlayerDie;
+            }
+        }
+    }
+
+    private void OnDestroy()
+    {
+        if (targetTr != null)
+        {
+            var playerDieEvent = targetTr.GetComponent<DestructedEvents>();
+            if (playerDieEvent != null)
+            {
+                playerDieEvent.OnEvent -= OnPlayerDie;
+            }
         }
     }
 
@@ -112,6 +136,7 @@ public class NPCController2 : MonoBehaviour
         states.Add(new PatrolState(this));
         states.Add(new TraceState(this));
         states.Add(new AttackState(this));
+        states.Add(new GameOverState(this));
 
         SetState(States.Idle);
     }
@@ -147,5 +172,10 @@ public class NPCController2 : MonoBehaviour
         }
 
         attackDef.ExecuteAttack(gameObject, targetTr.gameObject);
+    }
+
+    private void OnPlayerDie()
+    {
+        SetState(States.GameOver);
     }
 }
